@@ -11,7 +11,7 @@ import reviewRoute from "./routes/review.routes.js";
 import sessionMiddleware from "./middleware/session.js";
 
 const app = express();
-
+app.use(sessionMiddleware);
 // Database Connection
 const connect = async () => {
   try {
@@ -25,7 +25,7 @@ const connect = async () => {
 };
 
 // Middleware
-app.use(sessionMiddleware);
+
 app.use(express.json());
 app.use(cookieParser());
 const allowedOrigins = ["https://gaminghaven.onrender.com"];
