@@ -31,6 +31,7 @@ app.use(cookieParser());
 const allowedOrigins = ["https://gaminghaven.onrender.com"];
 const corsOptions = {
   origin: function (origin, callback) {
+    console.log("Origin: ", origin); // Log the origin for debugging
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     if (allowedOrigins.indexOf(origin) === -1) {
