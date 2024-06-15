@@ -41,7 +41,7 @@ app.use((err,req,res,next)=>{
 })
 
 
-app.listen("https://gaminghaven-backend.onrender.com",()=>{
+app.listen(5000,()=>{
     connect()
     console.log("Backend Server is running");
 })
