@@ -28,7 +28,20 @@ const connect = async () => {
 app.use(sessionMiddleware);
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: "https://gaminghaven.onrender.com", credentials: true }));
+const allowedOrigins = ["https://gaminghaven.onrender.com"];
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = "The CORS policy for this site does not allow access from the specified origin.";
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 // Routes
 app.use("/auth", authRoute);
@@ -48,7 +61,11 @@ app.use((err, req, res, next) => {
 
 // Start Server
 const port = process.env.PORT || 5000;
-app.listen(port, async () => {
-  await connect();
-  console.log(`Backend Server is running on port ${port}`);
+connect().then(() => {
+  app.listen(port, () => {
+    console.log(`Backend Server is running on port ${port}`);
+  });
+}).catch(err => {
+  console.error("Failed to connect to database:", err);
+  process.exit(1); // Exit the process with an error code
 });
